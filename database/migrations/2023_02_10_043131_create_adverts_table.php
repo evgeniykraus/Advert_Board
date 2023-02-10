@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('description');
+            $table->float('price');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('creator_id');
             $table->unsignedBigInteger('verifier_id');
