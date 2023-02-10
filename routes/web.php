@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\CategotyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,18 +18,21 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //Register
-Route::get('/register', [RegisterController::class, 'register'])->name('register');
-Route::post('/register', [RegisterController::class, 'store'])->name('register');
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 //Adverts
-Route::get('/какой-то роут', [AdvertController::class, 'index'])->name('adverts_board');
-Route::get('/какой-то роут', [AdvertController::class, 'show'])->name('adverts_board');
+Route::get('/adverts', [AdvertController::class, 'index'])->name('adverts');
+Route::get('/advert/{id}', [AdvertController::class, 'show'])->name('advert');
 
+//Categories
+Route::get('/categories', [CategotyController::class, 'index'])->name('categories');
+Route::get('/category/{id}', [CategotyController::class, 'show'])->name('category');
 
 //Users
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/home', [UserController::class, 'show'])->name('profile');
 
 
-//Categories
+
 
