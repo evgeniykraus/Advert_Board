@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategotyController extends Controller
+class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
     public function index()
     {
-        $categories = Category::with('children')->whereNull('parent_id')->get();
+        $categories = Category::all();
 
-        return view('category.all', compact('categories'));
+        $categories->transform(function ($category) use ($categories) {
+            $category->children = $categories->where('parent_id', $category->id);
+            return $category;
+        });
+
+        $categories = $categories->reject(function ($category) {
+            return $category->parent_id !== null;
+        });
+
+        return view('category.index', ['categories' => $categories]);
     }
 
     /**
@@ -40,15 +44,17 @@ class CategotyController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        $adverts = Category::query()->whereId($id)->with('advert')->get();
+
+        foreach ($adverts as $advert) {
+            dump($advert->name);
+        }
+        dump('Распечатал все объявы!');
+
+        return view('category.show', ['adverts' => $adverts]);
     }
 
     /**

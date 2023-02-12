@@ -22,6 +22,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('home')}}">Главная <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('categories')}}">Категории <span class="sr-only">(current)</span></a>
+            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
             @auth

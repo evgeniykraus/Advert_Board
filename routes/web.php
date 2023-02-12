@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategotyController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +26,8 @@ Route::get('/adverts', [AdvertController::class, 'index'])->name('adverts');
 Route::get('/advert/{id}', [AdvertController::class, 'show'])->name('advert');
 
 //Categories
-Route::get('/categories', [CategotyController::class, 'index'])->name('categories');
-Route::get('/category/{id}', [CategotyController::class, 'show'])->name('category');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category');
 
 //Users
 Route::get('/users', [UserController::class, 'index'])->name('users');
