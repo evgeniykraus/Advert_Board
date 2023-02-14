@@ -9,9 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function advert()
+    public function adverts()
     {
-        return $this->belongsTo(Advert::class);
+        return $this->hasMany(Advert::class, 'category_id');
     }
 
     public function children()

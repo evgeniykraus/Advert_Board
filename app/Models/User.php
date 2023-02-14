@@ -15,7 +15,7 @@ class User extends Authenticatable
 
     public function advert()
     {
-        return $this->belongsTo(Advert::class);
+        return $this->hasMany(Advert::class, 'creator_id');
     }
 
     /**

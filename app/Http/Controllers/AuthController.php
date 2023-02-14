@@ -30,12 +30,13 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['login' => 'Неверный логин или пароль!']);
         }
 
-        return redirect()->route('profile');
+        return redirect()->route('profile')->with([
+            'message' => Auth::user()->name . ', добро пожаловать :)',
+        ]);
     }
 
     public function register(Request $request)
     {
-
         $validatedData = $this->validateUserData($request);
 
         $user = User::create($validatedData);
@@ -71,8 +72,8 @@ class AuthController extends Controller
             'surname' => ['required', 'string', 'min:2', 'max:64'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'max:255'],
-            'password_confirmation' => ['required', 'same:password'],
+            'password' => ['required', 'string', 'min:6', 'max:255', 'confirmed'],
+            'password_confirmation' => ['required', 'min:6', 'max:255'],
         ]);
     }
 }

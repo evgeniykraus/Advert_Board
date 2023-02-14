@@ -2,83 +2,110 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdvertController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function advertsToCheck(Request $request)
+    {
+        if (Auth::user()->admin) {
+
+            $this->approve($request);
+
+            return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->get()]);
+
+        } else {
+            return response()
+                ->view('layouts.403')
+                ->setStatusCode(403);
+        }
+
+    }
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        return view('advert.add', ['creator_id' => Auth::id()]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $validatedData = $this->validateAdvertData($request);
+
+        $advert = Advert::create($validatedData);
+
+        if ($advert) {
+            return redirect()->route('profile')
+                ->with('message', 'Объявление создано!');
+        }
+
+        return redirect()->back()
+            ->withErrors(['formError' => 'При создании объявления произошла ошибка']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $advert = Advert::find($id);
+        $user = Auth::user();
+        $isAdmin = $user->admin ?? false;
+        $isCreator = $user->id === $advert->creator_id ?? false;
+
+        if (!$advert->approved && !$isAdmin && !$isCreator) {
+            return response()
+                ->view('layouts.403')
+                ->setStatusCode(403);
+        }
+
+        return view('advert.show', [
+            'advert' => $advert,
+            'seller' => $advert->creator,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+    private function approve(Request $request)
+    {
+        if (isset($request->id) && isset($request->approve)) {
+
+            $advert = Advert::where([
+                ['id', $request->id],
+                ['approved', 0],
+            ]);
+
+            if ($advert && $request->approve < 3) {
+                $advert->update([
+                    'approved' => $request->approve,
+                    'verifier_id' => Auth::user()->id,
+                ]);
+            }
+        }
+    }
+
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update(Request $request)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    private function validateAdvertData(Request $request): array
     {
-        //
+        return $request->validate([
+            'title' => ['required', 'string', 'min:2', 'max:255'],
+            'description' => ['required', 'string', 'min:2', 'max:4000'],
+            'category_id' => ['required', 'Integer', 'min:1'],
+            'creator_id' => ['required', 'Integer', 'min:1'],
+            'price' => ['required', 'numeric', 'min:0', 'max:100000000000'],
+        ]);
     }
 }
