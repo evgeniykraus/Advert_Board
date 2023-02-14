@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->float('price');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('creator_id');
-            $table->unsignedBigInteger('verifier_id')->default(null);
+            $table->unsignedBigInteger('verifier_id')->nullable();
             $table->boolean('approved')->default(0);
             $table->boolean('sold')->default(0);
             $table->timestamps();
