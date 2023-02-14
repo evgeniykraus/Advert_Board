@@ -15,12 +15,13 @@ return new class extends Migration {
         Schema::create('adverts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->float('price');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('creator_id');
-            $table->unsignedBigInteger('verifier_id');
-            $table->boolean('approved');
+            $table->unsignedBigInteger('verifier_id')->default(null);
+            $table->boolean('approved')->default(0);
+            $table->boolean('sold')->default(0);
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('creator_id')->references('id')->on('users');
