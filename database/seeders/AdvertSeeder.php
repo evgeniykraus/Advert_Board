@@ -15,14 +15,14 @@ class AdvertSeeder extends Seeder
                 'description' => "Тестовое описание_$i",
                 'category_id' => 2,
                 'creator_id' => 1,
-                'price' => rand(10000, 2000000),
+                'price' => rand(10000, 100000),
             ]);
             Advert::factory()->create([
                 'title' => "Машина_$i",
                 'description' => "Тестовое описание_$i",
                 'category_id' => 7,
                 'creator_id' => 1,
-                'price' => rand(100, 20000),
+                'price' => rand(100, 100000),
             ]);
         }
     }
