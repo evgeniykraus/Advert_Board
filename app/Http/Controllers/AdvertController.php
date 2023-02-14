@@ -28,6 +28,7 @@ class AdvertController extends Controller
     {
         $adverts = Advert::query()
             ->select(['id', 'title', 'description', 'price', 'created_at'])
+            ->where('approved', 1)
             ->simplePaginate(9);
         return view('category.show', ['adverts' => $adverts]);
     }
