@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Advert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class AdvertController extends Controller
 {
@@ -39,7 +40,7 @@ class AdvertController extends Controller
         return view('advert.add', ['creator_id' => Auth::id()]);
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validatedData = $this->validateAdvertData($request);
 
@@ -113,7 +114,7 @@ class AdvertController extends Controller
             'description' => ['required', 'string', 'min:2', 'max:4000'],
             'category_id' => ['required', 'Integer', 'min:1'],
             'creator_id' => ['required', 'Integer', 'min:1'],
-            'price' => ['required', 'numeric', 'min:0', 'max:100000000000'],
+            'price' => ['required', 'numeric', 'min:0', 'max:10000000'],
         ]);
     }
 }
