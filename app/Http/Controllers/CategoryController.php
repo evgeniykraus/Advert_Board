@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -26,15 +25,20 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
-        $adverts = $category->adverts()->where('approved', 1)->get();
-
-        $childCategories = $category->children;
-        foreach ($childCategories as $childCategory) {
-            $childAdverts = $childCategory->adverts()->where('approved', 1)->get();
-            $adverts = $adverts->concat($childAdverts);
+        if (!$category) {
+            abort(404);
         }
+        $adverts = $category->adverts()->where('approved', 1)->simplePaginate(9);
+
+        /*
+         * Не получается добавить пагинацию, поэтому пока закомментировал!
+                $childCategories = $category->children;
+                foreach ($childCategories as $childCategory) {
+                    $childAdverts = $childCategory->adverts()->where('approved', 1)->get();
+                    $adverts = $adverts->concat($childAdverts);
+                }
+         */
 
         return view('category.show', ['adverts' => $adverts]);
     }
-
 }

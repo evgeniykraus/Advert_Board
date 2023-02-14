@@ -65,7 +65,7 @@
                 @foreach ($categories as $category)
                     <li class="dropdown-submenu">
                         <a class="dropdown-item" tabindex="-1"
-                           href="{{route('category', $category->id)}}">{{$category->name}}</a>
+                            {{--  href="{{route('category', $category->id)}}"--}}>{{$category->name}}</a>
                         @if ($category->children->isNotEmpty())
                             @include('category.children', ['categories' => $category->children])
                         @endif
