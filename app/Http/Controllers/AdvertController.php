@@ -26,7 +26,10 @@ class AdvertController extends Controller
 
     public function index()
     {
-        //
+        $adverts = Advert::query()
+            ->select(['id', 'title', 'description', 'price', 'created_at'])
+            ->simplePaginate(9);
+        return view('category.show', ['adverts' => $adverts]);
     }
 
 
@@ -53,9 +56,13 @@ class AdvertController extends Controller
     public function show($id)
     {
         $advert = Advert::find($id);
+        if (!$advert) {
+            abort(404);
+        }
         $user = Auth::user();
+        $userId = $user->id ?? false;
         $isAdmin = $user->admin ?? false;
-        $isCreator = $user->id === $advert->creator_id ?? false;
+        $isCreator = $userId == $advert->creator_id;
 
         if (!$advert->approved && !$isAdmin && !$isCreator) {
             return response()

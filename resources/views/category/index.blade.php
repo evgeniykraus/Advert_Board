@@ -59,7 +59,7 @@
         <div class="dropdown">
             <button class="nav-link" type="button" id="dropdownMenu1" data-toggle="dropdown"
                     aria-haspopup="false" aria-expanded="false">
-                Все категории
+                Категории
             </button>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu1">
                 @foreach ($categories as $category)

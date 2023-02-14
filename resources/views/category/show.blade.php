@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
@@ -8,7 +7,8 @@
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
                             <div class="card-body">
-                                <p class="card-tex"><b>{{Illuminate\Support\Str::limit(strip_tags($advert->title),25)}}</b></p>
+                                <p class="card-tex">
+                                    <b>{{Illuminate\Support\Str::limit(strip_tags($advert->title),25)}}</b></p>
                                 <p class="card-tex">Цена: {{$advert->price}} ₽</p>
                                 <p class="card-text">
                                     Описание: {{Illuminate\Support\Str::limit(strip_tags($advert->description),100)}}</p>
@@ -28,5 +28,6 @@
                 @endforeach
             </div>
         </div>
+        {{ $adverts->links() }}
     </div>
 @endsection

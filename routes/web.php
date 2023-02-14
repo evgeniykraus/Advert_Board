@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['categories'])->group(function () {
 //Home_Page
-    Route::get('/', function () {
-        return view('layouts.home-page');
-    })->name('home');
+    Route::get('/', [AdvertController::class, 'index'])->name('home');
 
 //Auth
     Route::get('/login', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');
