@@ -10,7 +10,7 @@ Route::middleware(['categories'])->group(function () {
 //Home_Page
     Route::get('/', function () {
         return view('layouts.home-page');
-    })->name('home')->middleware('auth');
+    })->name('home');
 
 //Auth
     Route::get('/login', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');
@@ -33,7 +33,7 @@ Route::middleware(['categories'])->group(function () {
 //Users
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::get('/home', [UserController::class, 'show'])->name('profile');
+    Route::get('/home', [UserController::class, 'show'])->name('profile')->middleware('auth');
     Route::get('/home/admin_panel/{id?}/{approve?}', [AdvertController::class, 'advertsToCheck'])
         ->whereNumber(['id', 'approve'])
         ->name('admin_panel')
