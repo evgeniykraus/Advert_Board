@@ -11,12 +11,13 @@
                 <img src="/img/avatar.png" class="img-fluid rounded-circle" alt="User Photo">
             </div>
             <div class="col-md-4">
-                <h3>{{$user['name'] .' '. $user['surname']}}</h3>
+                <h3>{{$user->name .' '. $user->surname}}</h3>
                 <ul class="list-group">
-                    <li class="list-group-item"><b>Email:</b> {{$user['email']}}</li>
-                    <li class="list-group-item"><b>Телефон:</b> {{$user['phone']}}</li>
-                    <li class="list-group-item"><b>Дата регистрации:</b> {{$user['registerDate']}}</li>
-                    <a href="{{route('admin_panel')}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Админка</a>
+                    <li class="list-group-item"><b>Email:</b> {{$user->email}} </li>
+                    <li class="list-group-item"><b>Телефон:</b> {{$user->phone}} </li>
+                    <li class="list-group-item"><b>Дата регистрации:</b> {{ date_format($user->created_at, 'd.m.Y')}} </li>
+                    <a href="{{route('admin_panel')}}" class="btn btn-primary btn-lg active" role="button"
+                       aria-pressed="true">Админка</a>
                 </ul>
             </div>
         </div>

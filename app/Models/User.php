@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -53,5 +54,20 @@ class User extends Authenticatable
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);
+    }
+
+    public function setPhoneAttribute($phone)
+    {
+        $this->attributes['phone'] = '+7' . substr($phone, 1);
+    }
+
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = Str::title(strtolower($name));
+    }
+
+    public function setSurnameAttribute($surname)
+    {
+        $this->attributes['surname'] = Str::title(strtolower($surname));
     }
 }

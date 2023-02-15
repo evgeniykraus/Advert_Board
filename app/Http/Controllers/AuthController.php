@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginAuthRequest;
+use App\Http\Requests\RegisterAuthRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -22,11 +23,9 @@ class AuthController extends Controller
         return view('register.register');
     }
 
-    public function login(Request $request)
+    public function login(LoginAuthRequest $request)
     {
-        $validatedData = $this->validateLogin($request);
-
-        if (!Auth::attempt($validatedData)) {
+        if (!Auth::attempt($request->validated())) {
             return redirect()->back()->withErrors(['login' => 'Неверный логин или пароль!']);
         }
 
@@ -35,9 +34,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function register(RegisterAuthRequest $request)
     {
-        $validatedData = $this->validateUserData($request);
+        $validatedData = $request->validated();
 
         $user = User::create($validatedData);
 
@@ -55,25 +54,5 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect()->route('home');
-    }
-
-    private function validateLogin(Request $request)
-    {
-        return $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:6', 'max:255'],
-        ]);
-    }
-
-    private function validateUserData(Request $request)
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:64'],
-            'surname' => ['required', 'string', 'min:2', 'max:64'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'max:255', 'confirmed'],
-            'password_confirmation' => ['required', 'min:6', 'max:255'],
-        ]);
     }
 }

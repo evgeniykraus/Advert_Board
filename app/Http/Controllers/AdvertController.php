@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAdvertRequest;
 use App\Models\Advert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,18 +12,9 @@ class AdvertController extends Controller
 {
     public function advertsToCheck(Request $request)
     {
-        if (Auth::user()->admin) {
+        $this->approve($request);
 
-            $this->approve($request);
-
-            return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->get()]);
-
-        } else {
-            return response()
-                ->view('layouts.403')
-                ->setStatusCode(403);
-        }
-
+        return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->get()]);
     }
 
     public function index()
@@ -40,27 +32,22 @@ class AdvertController extends Controller
         return view('advert.add', ['creator_id' => Auth::id()]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreAdvertRequest $request): RedirectResponse
     {
-        $validatedData = $this->validateAdvertData($request);
+        Advert::create($request->validated());
 
-        $advert = Advert::create($validatedData);
-
-        if ($advert) {
-            return redirect()->route('profile')
-                ->with('message', 'Объявление создано!');
-        }
-
-        return redirect()->back()
-            ->withErrors(['formError' => 'При создании объявления произошла ошибка']);
+        return redirect()->route('profile')
+            ->with('message', 'Объявление создано!');
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $advert = Advert::find($id);
+
         if (!$advert) {
             abort(404);
         }
+
         $user = Auth::user();
         $userId = $user->id ?? false;
         $isAdmin = $user->admin ?? false;
@@ -94,27 +81,5 @@ class AdvertController extends Controller
                 ]);
             }
         }
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-
-    public function update(Request $request)
-    {
-        //
-    }
-
-    private function validateAdvertData(Request $request): array
-    {
-        return $request->validate([
-            'title' => ['required', 'string', 'min:2', 'max:255'],
-            'description' => ['required', 'string', 'min:2', 'max:4000'],
-            'category_id' => ['required', 'Integer', 'min:1'],
-            'creator_id' => ['required', 'Integer', 'min:1'],
-            'price' => ['required', 'numeric', 'min:0', 'max:10000000'],
-        ]);
     }
 }
