@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <label for="Price">Цена</label>
-                    <input type="text" class="form-control" name="price" value="{{ old('price') }}">
+                    <input type="number" class="form-control" name="price" value="{{ old('price') }}">
                     @error('price')
                     <div class="alert alert-danger" role="alert"> {{$message}} </div>
                     @enderror
