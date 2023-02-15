@@ -20,7 +20,7 @@ class AdvertSeeder extends Seeder
             Advert::factory()->create([
                 'title' => "Машина_$i",
                 'description' => "Тестовое описание_$i",
-                'category_id' => 7,
+                'category_id' => 8,
                 'creator_id' => 1,
                 'price' => rand(100, 100000),
             ]);
