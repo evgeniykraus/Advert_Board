@@ -58,6 +58,8 @@ class User extends Authenticatable
 
     public function setPhoneAttribute($phone)
     {
+        $phone = preg_replace("/[^a-zA-Z0-9\s]/", '', $phone);
+
         $this->attributes['phone'] = '+7' . substr($phone, 1);
     }
 

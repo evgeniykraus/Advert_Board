@@ -28,7 +28,7 @@ class PhoneNumber implements Rule
     {
         $phone = preg_replace("/[^a-zA-Z0-9\s]/", '', $value);
 
-        return preg_match('%^((8|7))9[0-9]{9}$%i', $phone) && strlen($phone) >= 11;
+        return preg_match('%^((8|7|))9[0-9]{9}$%i', $phone) && strlen($phone) >= 11;
     }
 
     /**
