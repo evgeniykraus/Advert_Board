@@ -24,14 +24,24 @@
                     <td>{{Illuminate\Support\Str::limit(strip_tags($advert->description),200)}}</td>
                     <td><a href="{{route('advert', $advert->id)}}"> Ссылка</a></td>
                     <td>
-                        <a href="{{route('admin_panel', [$advert->id, 1])}}">
-                            <button type="button" class="btn btn-outline-success">Подтвердить</button>
-                        </a>
+                        <form action="{{route('admin_panel')}}" method="post">
+                            @csrf
+                            <label>
+                                <input hidden="" value="1" name="approved">
+                                <input hidden="" value="{{$advert->id}}" name="id">
+                                <button type="submit" class="btn btn-outline-success">Подтвердить</button>
+                            </label>
+                        </form>
                     </td>
                     <td>
-                        <a href="{{route('admin_panel', [$advert->id, 2])}}">
-                            <button type="button" class="btn btn-outline-danger">Отклонить</button>
-                        </a>
+                        <form action="{{route('admin_panel')}}" method="post">
+                            @csrf
+                            <label>
+                                <input hidden="" value="2" name="approved">
+                                <input hidden="" value="{{$advert->id}}" name="id">
+                                <button type="submit" class="btn btn-outline-danger">Отклонить</button>
+                            </label>
+                        </form>
                     </td>
                 </tr>
             @endforeach

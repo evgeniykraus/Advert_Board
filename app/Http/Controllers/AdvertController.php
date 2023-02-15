@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApproveAdvertRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Models\Advert;
 use Illuminate\Http\Request;
@@ -10,10 +11,8 @@ use Illuminate\Http\RedirectResponse;
 
 class AdvertController extends Controller
 {
-    public function advertsToCheck(Request $request)
+    public function advertsToCheck()
     {
-        $this->approve($request);
-
         return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->paginate(5)]);
     }
 
@@ -22,7 +21,7 @@ class AdvertController extends Controller
         $adverts = Advert::query()
             ->select(['id', 'title', 'description', 'price', 'created_at'])
             ->where('approved', 1)
-            ->simplePaginate(9);
+            ->paginate(9);
         return view('category.show', ['adverts' => $adverts]);
     }
 
@@ -65,21 +64,17 @@ class AdvertController extends Controller
         ]);
     }
 
-    private function approve(Request $request)
+    public function approve(ApproveAdvertRequest $request)
     {
-        if (isset($request->id) && isset($request->approve)) {
+        $advert = Advert::where('id', $request->id)
+            ->where('approved', 0)
+            ->firstOrFail();
 
-            $advert = Advert::where([
-                ['id', $request->id],
-                ['approved', 0],
-            ]);
+        $advert->update([
+            'approved' => $request->approved,
+            'verifier_id' => Auth::id(),
+        ]);
 
-            if ($advert && $request->approve < 3) {
-                $advert->update([
-                    'approved' => $request->approve,
-                    'verifier_id' => Auth::user()->id,
-                ]);
-            }
-        }
+        return $this->advertsToCheck();
     }
 }

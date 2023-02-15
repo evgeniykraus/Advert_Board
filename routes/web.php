@@ -30,11 +30,12 @@ Route::middleware(['categories'])->group(function () {
 //Users
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/home', [UserController::class, 'show'])->name('profile')->middleware('auth');
-    Route::get('/home/admin_panel/{id?}/{approve?}', [AdvertController::class, 'advertsToCheck'])
-        ->whereNumber(['id', 'approve'])
-        ->name('admin_panel')
-        ->middleware('auth')
-        ->middleware('admin');
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/home/admin_panel', [AdvertController::class, 'advertsToCheck'])->name('admin_panel');
+        Route::post('/home/admin_panel', [AdvertController::class, 'approve'])->name('admin_panel');
+    });
+
 
 });
 
