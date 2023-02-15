@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['categories'])->group(function () {
 //Home_Page
     Route::get('/', [AdvertController::class, 'index'])->name('home');
+    Route::post('/', [AdvertController::class, 'search'])->name('search');
 
 //Auth
     Route::get('/login', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');

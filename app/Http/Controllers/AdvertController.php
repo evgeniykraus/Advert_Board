@@ -5,11 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApproveAdvertRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Models\Advert;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 
 class AdvertController extends Controller
 {
+    public function search(Request $request)
+    {
+        return view('advert.index', [
+            'adverts' => Advert::where([
+                ['approved', 1],
+                ['title', 'LIKE', '%' . $request->search . '%'],
+            ])
+                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                ->paginate(5)]);
+    }
+
     public function advertsToCheck()
     {
         return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->paginate(5)]);
@@ -17,11 +29,12 @@ class AdvertController extends Controller
 
     public function index()
     {
+
         $adverts = Advert::query()
             ->select(['id', 'title', 'description', 'price', 'created_at'])
             ->where('approved', 1)
             ->paginate(9);
-        return view('category.show', ['adverts' => $adverts]);
+        return view('advert.index', ['adverts' => $adverts]);
     }
 
 
