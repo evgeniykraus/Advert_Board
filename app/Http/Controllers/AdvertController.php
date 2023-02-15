@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApproveAdvertRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Models\Advert;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 
@@ -41,21 +40,11 @@ class AdvertController extends Controller
 
     public function show(int $id)
     {
-        $advert = Advert::find($id);
+        $advert = Advert::findOrFail($id);
 
-        if (!$advert) {
-            abort(404);
-        }
+        if (!$advert->approved && !$this->canViewUnapproved($advert)) {
 
-        $user = Auth::user();
-        $userId = $user->id ?? false;
-        $isAdmin = $user->admin ?? false;
-        $isCreator = $userId == $advert->creator_id;
-
-        if (!$advert->approved && !$isAdmin && !$isCreator) {
-            return response()
-                ->view('layouts.403')
-                ->setStatusCode(403);
+            return response()->view('layouts.403')->setStatusCode(403);
         }
 
         return view('advert.show', [
@@ -76,5 +65,11 @@ class AdvertController extends Controller
         ]);
 
         return $this->advertsToCheck();
+    }
+
+    private function canViewUnapproved(Advert $advert): bool
+    {
+        $user = Auth::user();
+        return $user && ($user->admin || $user->id === $advert->creator_id);
     }
 }
