@@ -20,7 +20,6 @@ Route::middleware(['categories'])->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 //Adverts
-//    Route::get('/adverts', [AdvertController::class, 'index'])->name('adverts');
     Route::get('/advert/{id}', [AdvertController::class, 'show'])->name('advert')->whereNumber('id');
     Route::get('/advert/add', [AdvertController::class, 'create'])->middleware('auth')->name('add_advert');
     Route::post('/advert/add', [AdvertController::class, 'store'])->middleware('auth')->name('add_advert');
@@ -29,13 +28,13 @@ Route::middleware(['categories'])->group(function () {
     Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category');
 
 //Users
-
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/home', [UserController::class, 'show'])->name('profile')->middleware('auth');
     Route::get('/home/admin_panel/{id?}/{approve?}', [AdvertController::class, 'advertsToCheck'])
         ->whereNumber(['id', 'approve'])
         ->name('admin_panel')
-        ->middleware('auth');
+        ->middleware('auth')
+        ->middleware('admin');
 
 });
 
