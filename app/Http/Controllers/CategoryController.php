@@ -28,7 +28,7 @@ class CategoryController extends Controller
         if (!$category) {
             abort(404);
         }
-        $adverts = $category->adverts()->where('approved', 1)->simplePaginate(9);
+        $adverts = $category->adverts()->where('approved', 1)->paginate(9);
 
         /*
          * Не получается добавить пагинацию, поэтому пока закомментировал!

@@ -38,4 +38,5 @@
             @endif
             </tbody>
     </table>
+    {{ $adverts->links() }}
 @endsection

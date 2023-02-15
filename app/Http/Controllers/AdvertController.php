@@ -14,7 +14,7 @@ class AdvertController extends Controller
     {
         $this->approve($request);
 
-        return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->get()]);
+        return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->paginate(5)]);
     }
 
     public function index()

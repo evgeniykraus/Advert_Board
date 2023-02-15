@@ -12,4 +12,5 @@
             <a href="{{route('advert', $advert->id)}}" class="list-group-item list-group-item-action">{{$advert->title}}</a>
         @endforeach
     @endif
+        {{ $adverts->links() }}
 </div>
