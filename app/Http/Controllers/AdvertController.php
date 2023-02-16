@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveAdvertRequest;
+use App\Http\Requests\SellAdvertRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Models\Advert;
 use Illuminate\Http\Request;
@@ -13,14 +14,17 @@ class AdvertController extends Controller
 {
     public function search(Request $request)
     {
-        $adverts = Advert::where([
-            ['approved', 1],
-            ['title', 'LIKE', '%' . $request->search . '%'],
-        ])
-            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
-            ->paginate(9);
+        $query = Advert::query()
+            ->where('approved', 1)
+            ->where('sold', 0)
+            ->where(function ($query) use ($request) {
+                $query->where('title', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $request->search . '%');
+            });
 
-        return view('advert.index', ['adverts' => $adverts]);
+        $adverts = $query->paginate(9);
+
+        return view('advert.index', compact('adverts'));
     }
 
     public function advertsToCheck()
@@ -69,9 +73,7 @@ class AdvertController extends Controller
 
     public function approve(ApproveAdvertRequest $request)
     {
-        $advert = Advert::where('id', $request->id)
-            ->where('approved', 0)
-            ->firstOrFail();
+        $advert = Advert::findOrFail($request->id);
 
         $advert->update([
             'approved' => $request->approved,
@@ -79,6 +81,18 @@ class AdvertController extends Controller
         ]);
 
         return $this->advertsToCheck();
+    }
+
+    public function sell(SellAdvertRequest $request)
+    {
+        $advert = Advert::findOrFail($request->id);
+
+        $advert->update([
+            'sold' => $request->sold,
+        ]);
+
+        return redirect()->route('profile')
+            ->with('message', 'Объявление снято с публикации!');
     }
 
     private function canViewUnapproved(Advert $advert): bool

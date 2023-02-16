@@ -32,6 +32,7 @@ class Advert extends Model
         'price',
         'approved',
         'verifier_id',
+        'sold',
     ];
 
 }

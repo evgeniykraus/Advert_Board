@@ -29,7 +29,8 @@ Route::middleware(['categories', 'user_on_black_list'])->group(function () {
 
 //Adverts
     Route::prefix('/advert')->group(function () {
-        Route::get('/{id}', [AdvertController::class, 'show'])->name('advert')->whereNumber('id');
+        Route::get('/{id}', [AdvertController::class, 'show'])->whereNumber('id')->name('advert');
+        Route::post('/sell', [AdvertController::class, 'sell'])->whereNumber('id')->name('sell');
         Route::get('/add', [AdvertController::class, 'create'])->middleware('auth')->name('add_advert');
         Route::post('/add', [AdvertController::class, 'store'])->middleware('auth')->name('add_advert');
     });

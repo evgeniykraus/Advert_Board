@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApproveAdvertRequest extends FormRequest
+class SellAdvertRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class ApproveAdvertRequest extends FormRequest
     {
         return [
             'id' => ['required', 'integer', 'exists:adverts,id'],
-            'approved' => ['required', 'integer', 'min:0', 'max:2'],
+            'sold' => ['required', 'integer', 'min:1', 'max:1'],
         ];
     }
 }
