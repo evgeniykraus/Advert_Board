@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::middleware(['categories',])->group(function () {
+Route::middleware(['categories', 'user_on_black_list'])->group(function () {
 
 //Home_Page
     Route::get('/', [AdvertController::class, 'index'])->name('home');

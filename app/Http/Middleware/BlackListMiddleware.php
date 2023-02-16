@@ -17,11 +17,11 @@ class BlackListMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $userOnBlackList = isset(Auth::user()->on_black_list) ? Auth::user()->on_black_list : 0;
+        $userOnBlackList = Auth::user()->on_black_list ?? 0;
 
         if ($userOnBlackList) {
-
             Auth::logout();
+            return response()->redirectToRoute('home');
         }
 
         return $next($request);
