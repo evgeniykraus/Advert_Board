@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use function PHPUnit\Framework\isNull;
 
 class User extends Authenticatable
 {
@@ -26,10 +27,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'admin',
         'surname',
         'email',
         'phone',
         'password',
+        'on_black_list',
     ];
 
     /**

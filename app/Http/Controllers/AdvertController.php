@@ -25,7 +25,7 @@ class AdvertController extends Controller
 
     public function advertsToCheck()
     {
-        return view('advert.need-check', ['adverts' => Advert::where('approved', 0)->paginate(5)]);
+        return view('admin.adverts-to-check', ['adverts' => Advert::where('approved', 0)->paginate(5)]);
     }
 
     public function index()

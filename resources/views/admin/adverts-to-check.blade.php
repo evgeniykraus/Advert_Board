@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('content')
 
+    @include('admin.admin-nav-bar')
+
     <table class="table table-bordered">
 
         @if($adverts->isEmpty())
@@ -24,7 +26,7 @@
                     <td>{{Illuminate\Support\Str::limit(strip_tags($advert->description),200)}}</td>
                     <td><a href="{{route('advert', $advert->id)}}"> Ссылка</a></td>
                     <td>
-                        <form action="{{route('admin_panel')}}" method="post">
+                        <form action="{{route('adverts_to_check')}}" method="post">
                             @csrf
                             <label>
                                 <input hidden="" value="1" name="approved">
@@ -34,7 +36,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="{{route('admin_panel')}}" method="post">
+                        <form action="{{route('adverts_to_check')}}" method="post">
                             @csrf
                             <label>
                                 <input hidden="" value="2" name="approved">

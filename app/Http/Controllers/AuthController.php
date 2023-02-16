@@ -25,13 +25,19 @@ class AuthController extends Controller
 
     public function login(LoginAuthRequest $request)
     {
-        if (!Auth::attempt($request->validated())) {
-            return redirect()->back()->withErrors(['login' => 'Неверный логин или пароль!']);
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && $user->on_black_list) {
+            return redirect()->back()->withErrors(['login' => 'Ваш аккаунт был заблокирован!']);
         }
 
-        return redirect()->route('profile')->with([
-            'message' => Auth::user()->name . ', добро пожаловать :)',
-        ]);
+        if (Auth::attempt($request->validated())) {
+            return redirect()->route('profile')->with([
+                'message' => Auth::user()->name . ', добро пожаловать :)',
+            ]);
+        }
+
+        return redirect()->back()->withErrors(['login' => 'Неверный логин или пароль!']);
     }
 
     public function register(RegisterAuthRequest $request)

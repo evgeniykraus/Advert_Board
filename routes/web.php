@@ -6,7 +6,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['categories'])->group(function () {
+
+
+Route::middleware(['categories', 'user_on_black_list'])->group(function () {
+
 //Home_Page
     Route::get('/', [AdvertController::class, 'index'])->name('home');
     Route::get('/search', [AdvertController::class, 'search'])->name('search');
@@ -33,8 +36,13 @@ Route::middleware(['categories'])->group(function () {
     Route::get('/home', [UserController::class, 'show'])->name('profile')->middleware('auth');
 
     Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/home/admin_panel', [AdvertController::class, 'advertsToCheck'])->name('admin_panel');
-        Route::post('/home/admin_panel', [AdvertController::class, 'approve'])->name('admin_panel');
+        Route::get('/home/admin_panel', [UserController::class, 'adminPanel'])->name('admin_panel');
+        Route::get('/home/admin_panel/users', [UserController::class, 'usersList'])->name('users');
+        Route::post('/home/admin_panel/users', [UserController::class, 'blockUser'])->name('users');
+        Route::get('/home/admin_panel/user/edit', [UserController::class, 'edit'])->name('edit');
+        Route::post('/home/admin_panel/user/edit', [UserController::class, 'update'])->name('update');
+        Route::get('/home/admin_panel/adverts', [AdvertController::class, 'advertsToCheck'])->name('adverts_to_check');
+        Route::post('/home/admin_panel/adverts', [AdvertController::class, 'approve'])->name('advert_approve');
     });
 
 

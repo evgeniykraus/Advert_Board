@@ -3,10 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\PhoneNumber;
-use App\Rules\UniquePhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterAuthRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,14 @@ class RegisterAuthRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
+            'id' => ['required', 'exists:users,id'],
+            'admin' => ['required', 'integer', 'min:0', 'max:1'],
             'name' => ['required', 'string', 'min:2', 'max:64'],
             'surname' => ['required', 'string', 'min:2', 'max:64'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
-            'phone' => ['required', 'unique:users', new PhoneNumber(), new UniquePhoneNumber()],
-            'password' => ['required', 'string', 'min:6', 'max:255', 'confirmed', 'regex:/^[0-9A-Za-z]+$/'],
-            'password_confirmation' => ['required', 'min:6', 'max:255', 'regex:/^[0-9A-Za-z]+$/'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email,' . $this->input('id')],
+            'phone' => ['required', new PhoneNumber(), 'unique:users,phone,' . $this->input('id')],
+            'password' => ['nullable', 'string', 'min:6', 'max:255', 'regex:/^[0-9A-Za-z]+$/'],
         ];
     }
 }
