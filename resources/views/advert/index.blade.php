@@ -3,7 +3,7 @@
 
     <div class="album py-5 bg-light">
         <nav class="navbar navbar-light bg-light">
-            <form class="form-inline" method="post" action="{{route('search')}}">
+            <form class="form-inline" method="get" action="{{route('search')}}">
                 @csrf
                 <input class="form-control mr-sm-2" name="search" type="search" placeholder="Поиск" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
@@ -39,7 +39,7 @@
                     @endforeach
                 </div>
             </div>
-            {{ $adverts->links() }}
+            {{ $adverts->appends(['search' => request()->search])->links() }}
         @endif
     </div>
 @endsection

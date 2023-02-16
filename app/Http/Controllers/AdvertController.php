@@ -13,13 +13,14 @@ class AdvertController extends Controller
 {
     public function search(Request $request)
     {
-        return view('advert.index', [
-            'adverts' => Advert::where([
-                ['approved', 1],
-                ['title', 'LIKE', '%' . $request->search . '%'],
-            ])
-                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
-                ->paginate(5)]);
+        $adverts = Advert::where([
+            ['approved', 1],
+            ['title', 'LIKE', '%' . $request->search . '%'],
+        ])
+            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+            ->paginate(9);
+
+        return view('advert.index', ['adverts' => $adverts]);
     }
 
     public function advertsToCheck()

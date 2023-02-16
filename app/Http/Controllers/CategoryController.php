@@ -39,6 +39,6 @@ class CategoryController extends Controller
                 }
          */
 
-        return view('category.show', ['adverts' => $adverts]);
+        return view('advert.index', ['adverts' => $adverts]);
     }
 }
