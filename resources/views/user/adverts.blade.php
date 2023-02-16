@@ -1,8 +1,8 @@
 <h1>Объявления</h1>
 <nav class="nav">
-    <a class="nav-link active" href="home?status=1">Активные</a>
-    <a class="nav-link" href="home?status=2">Проданные</a>
-    <a class="nav-link" href="home?status=3">На проверке</a>
+    <a class="nav-link active" href="{{route('profile', 'status=1')}}">Активные</a>
+    <a class="nav-link" href="{{route('profile', 'status=2')}}">Проданные</a>
+    <a class="nav-link" href="{{route('profile', 'status=3')}}">На проверке</a>
 </nav>
 <div class="list-group">
     @if($adverts->isEmpty())
@@ -12,5 +12,5 @@
             <a href="{{route('advert', $advert->id)}}" class="list-group-item list-group-item-action">{{$advert->title}}</a>
         @endforeach
     @endif
-        {{ $adverts->links() }}
+        {{ $adverts->appends(['status' => request()->status])->links() }}
 </div>
