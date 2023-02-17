@@ -74,13 +74,13 @@ class UserController extends Controller
     {
         switch ($_GET["status"] ?? false) {
             case 2:
-                $adverts = Auth::user()->advert()->where('sold', 1)->paginate(5);
+                $adverts = Auth::user()->advert()->where('sold', 1)->orderBy('id', 'desc')->paginate(5);
                 break;
             case 3:
-                $adverts = Auth::user()->advert()->where('approved', 0)->paginate(5);
+                $adverts = Auth::user()->advert()->where('approved', 0)->orderBy('id', 'desc')->paginate(5);
                 break;
             default:
-                $adverts = Auth::user()->advert()->where([['sold', 0], ['approved', 1],])->paginate(5);
+                $adverts = Auth::user()->advert()->where([['sold', 0], ['approved', 1],])->orderBy('id', 'desc')->paginate(5);
         }
 
         return $adverts;
