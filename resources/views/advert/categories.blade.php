@@ -1,7 +1,7 @@
 @foreach ($categories as $category)
-    @if ($category->children->isNotEmpty())
+    @if ($category->childrenCategories->isNotEmpty())
         <optgroup label="{{$category->name}}">
-            @include('advert.categories', ['categories' => $category->children])
+            @include('advert.categories', ['categories' => $category->childrenCategories])
         </optgroup>
     @else
         <option value="{{$category->id}}" @if($category->id == old('category_id')) selected @endif>

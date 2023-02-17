@@ -14,8 +14,13 @@ class Category extends Model
         return $this->hasMany(Advert::class, 'category_id');
     }
 
-    public function children()
+    public function categories()
     {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function childrenCategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->with('categories');
     }
 }

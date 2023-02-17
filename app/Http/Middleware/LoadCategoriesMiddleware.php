@@ -16,16 +16,9 @@ class LoadCategoriesMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $categories = Category::all();
-
-        $categories->transform(function ($category) use ($categories) {
-            $category->children = $categories->where('parent_id', $category->id);
-            return $category;
-        });
-
-        $categories = $categories->reject(function ($category) {
-            return $category->parent_id !== null;
-        });
+        $categories = Category::whereNull('parent_id')
+            ->with('childrenCategories')
+            ->get();
 
         view()->share('categories', $categories);
 
