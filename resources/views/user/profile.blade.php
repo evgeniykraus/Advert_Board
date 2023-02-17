@@ -16,8 +16,10 @@
                     <li class="list-group-item"><b>Email:</b> {{$user->email}} </li>
                     <li class="list-group-item"><b>Телефон:</b> {{$user->phone}} </li>
                     <li class="list-group-item"><b>Дата регистрации:</b> {{ date_format($user->created_at, 'd.m.Y')}} </li>
-                    <a href="{{route('admin_panel')}}" class="btn btn-primary btn-lg active" role="button"
-                       aria-pressed="true">Админка</a>
+                    @if($user->admin === 1)
+                        <a href="{{route('admin_panel')}}" class="btn btn-primary btn-lg active" role="button"
+                           aria-pressed="true">Админка</a>
+                    @endif
                 </ul>
             </div>
         </div>

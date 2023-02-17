@@ -12,7 +12,7 @@ class UserController extends Controller
     public function show()
     {
         $user = User::query()
-            ->select(['name', 'surname', 'phone', 'email', 'created_at',])
+            ->select(['name', 'surname', 'phone', 'email', 'created_at', 'admin'])
             ->where('id', Auth::user()->id)
             ->first();
 
@@ -55,7 +55,6 @@ class UserController extends Controller
             'message' => 'Данные были обновлены!'
         ]);
     }
-
 
     public function blockUser(Request $request)
     {
