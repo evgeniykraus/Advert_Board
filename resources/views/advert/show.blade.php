@@ -48,7 +48,7 @@
                 <p class="card-text">{{$seller->phone}}</p>
                 <h6 class="card-title">Email:</h6>
                 <p class="card-text">{{$seller->email}}</p>
-                @if($viewer === $seller->id && !$advert->sold)
+                @if($viewer === $seller->id && !$advert->sold && $advert->approved)
                     <form action="{{route('sell')}}" method="post">
                         @csrf
                         <label>
