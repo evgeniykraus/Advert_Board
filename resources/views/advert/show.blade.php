@@ -35,6 +35,9 @@
         </div>
         <div class="col-8 col-md-6 col-lg-4">
             <div class="card-body">
+                <h4 class="card-title">Категория:</h4>
+                <p class="card-text">{{$category->name}}</p>
+
                 <h4 class="card-title">Дата публикации:</h4>
                 <p class="card-text">{{date_format($advert->created_at, 'd.m.Y')}}</p>
 
@@ -45,7 +48,16 @@
                 <p class="card-text">{{$seller->phone}}</p>
                 <h6 class="card-title">Email:</h6>
                 <p class="card-text">{{$seller->email}}</p>
+                @if($viewer === $seller->id)
+                    <form action="{{route('sell')}}" method="post">
+                        @csrf
+                        <label>
+                            <input hidden="" value="{{$advert->id}}" name="id">
+                            <input hidden="" value="1" name="sold">
+                            <button type="submit" class="btn btn-outline-success">Отметить как проданное</button>
+                        </label>
+                    </form>
+                @endif
             </div>
         </div>
-
 @endsection

@@ -68,6 +68,8 @@ class AdvertController extends Controller
         return view('advert.show', [
             'advert' => $advert,
             'seller' => $advert->creator,
+            'category' => $advert->category,
+            'viewer' => Auth::id() ?? false,
         ]);
     }
 
