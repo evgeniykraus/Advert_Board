@@ -14,6 +14,11 @@ class AdvertController extends Controller
 {
     public function search(Request $request)
     {
+        $request->validate(
+            [
+                'search' => 'required'
+            ]);
+
         $query = Advert::query()
             ->where('approved', 1)
             ->where('sold', 0)
